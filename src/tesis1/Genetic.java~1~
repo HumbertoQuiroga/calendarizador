@@ -1,0 +1,32 @@
+package tesis1;
+
+public class Genetic {
+  VectorGrupos grupos;
+  VectorMaestros maestros;
+  VectorAulas aulas;
+  VectorSlotTime hora;
+
+
+  /**Construct the application*/
+  public Genetic() {
+  }
+  /**Main method*/
+  public static void main(String[] args) {
+    try {
+
+    /**Obtiene información de los maestros del archivo TabMaes.dat*/
+    VectorGrupos grupos = new VectorGrupos;
+    grupos.ObtenDatosGrupos("TabMas.dat");
+
+
+    /**Obtiene información de los tipos de horarios del archivo TipoHors.txt*/
+
+
+
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+}

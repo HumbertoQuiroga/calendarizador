@@ -1,0 +1,531 @@
+package tesis1;
+import tesis1.datos.*;
+import tesis1.genetic.*;
+import java.util.Random;
+
+public class Genetic {
+  private Random genRandPP = new Random(4);
+
+  /**Construct the application*/
+  public Genetic() {
+
+
+    try{
+
+      //genetico1();
+      hillclimbing();
+      //tabu();
+
+
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**Main method*/
+  public static void main(String[] args) {
+    Genetic ag = new Genetic();
+
+  }
+
+  private int costo(Catalogo cat){
+    int empAulas =  cat.aulas.getEmpalmes(); //medias horas empalmadas
+    int empMaestro = cat.maestros.getEmpalmes();//medias horas empalmadas
+    int empGrpsSC = cat.semCarrs.getBloqueads(); /*grupos que no estan en una
+                                      trayectorioa de horario válido*/
+    int turnos = cat.semCarrs.costoTurnos();
+    int hrsContinuas = cat.maestros.getHrsContinuas();
+
+    return empAulas + empMaestro + empGrpsSC + hrsContinuas + turnos;
+  }
+
+  private void imprimeCosto(Catalogo cat){
+    int empAulas =  cat.aulas.getEmpalmes(); //medias horas empalmadas
+    int empMaestro = cat.maestros.getEmpalmes();//medias horas empalmadas
+    int empGrpsSC = cat.semCarrs.getBloqueads(); /*grupos que no estan en una
+                                      trayectorioa de horario válido*/
+    int hrsContinuas = cat.maestros.getHrsContinuas();
+    int turnos = cat.semCarrs.costoTurnos();
+/*
+    System.out.print("*** COSTO =  ");System.out.println(empAulas + empMaestro + empGrpsSC + hrsContinuas + turnos);
+    System.out.print("empAulas=");System.out.print(empAulas);
+    System.out.print("  empMaest=");System.out.print(empMaestro);
+    System.out.print("  empSC=");System.out.print(empGrpsSC);
+    System.out.print("  continuas=");System.out.print(hrsContinuas);
+    System.out.print("  turnos=");System.out.println(turnos);
+*/
+  }
+
+
+
+
+/***************************************************************************
+ * Rutinas para pruebas
+ */
+  private void testImprimeSlotsTime(VectorSlotTime horas){
+  //Imprime todos los slotTime`s
+    int a, b;
+    int cpa = horas.size();
+    for(a=0;a<cpa-1;a++)for(b=a+1;b<cpa;b++){
+      System.out.print(((SlotTime)horas.elementAt(a)).getOffsetStringHora());
+      System.out.print(((SlotTime)horas.elementAt(a)).getDescripcion()+"   ");
+      System.out.print(((SlotTime)horas.elementAt(b)).getOffsetStringHora());
+      System.out.println(((SlotTime)horas.elementAt(b)).getDescripcion());
+
+      if( ((SlotTime)horas.elementAt(a)).
+                              isEmpalme( (SlotTime)horas.elementAt(b) )
+      ){System.out.println("Empalme");}       //then "empalme"
+      else{System.out.println("No Empalme");}   //else "no empalme"
+
+      //imprime matrices;
+      testImprimeMatrizSlotTime(((SlotTime)horas.elementAt(a)));
+      testImprimeMatrizSlotTime(((SlotTime)horas.elementAt(b)));
+    }
+  }
+
+  private void testImprimeMatrizSlotTime(SlotTime st){
+    int [][] ar1= st.getMascaraArray();
+    for(int r=0; r<6; r ++){
+      for(int c=0; c<5;c++){
+        System.out.print(ar1[r][c]);
+      }
+      System.out.println();
+    }System.out.println();
+  }
+
+
+
+
+  private void hillclimbing(){
+      Catalogo cat1 = new Catalogo("tabGrupos.txt", "tabMaes.dat",
+                                    "tabAulas.dat", "tipoHors.txt",
+                                    "tabSemCarr.txt", "tabMaterias.txt");
+      cat1.verificaDatos();
+
+      cat1.asignaHorRandom();
+      //cat1.imprimeCatalog();
+      //cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+      //cat1.asignaHora(0,53);
+      //cat1.asignaHora(0,53);
+
+      int ciclos=0;
+      Grupo gSel; //Grupo seleccionado para hacer cambio
+      int stPropu;//horario seleccionado
+      int stOrig;
+      int indxGpo;
+      int costoInic, costoFinal,cambios=0,cicloUltimo=0;;
+      int costoMinimo=100000;
+      boolean finProceso=false;
+
+      costoInic = costo(cat1);
+
+      do{
+        //Selecciona un grupo
+
+        indxGpo=genRandPP.nextInt(cat1.grupos.size());
+        gSel=(Grupo)cat1.grupos.elementAt(indxGpo);
+        stOrig = gSel.getHora(); //horario del grupo seleccionado
+
+        //Propone un horario nuevo al grupo seleccionado
+        stPropu=gSel.getOpcs()[genRandPP.nextInt(gSel.getOpcs().length)];
+
+        cat1.cambiaHora(indxGpo,stPropu);
+        costoFinal=costo(cat1);
+        ciclos++;
+        if((costoFinal>costoInic) ){
+           cat1.cambiaHora(indxGpo,stOrig);
+        }else{
+          costoInic=costoFinal;
+          cambios++;
+        }
+
+        if(ciclos%100==0){
+          this.imprimeCosto(cat1);
+          //System.out.print("ciclos=");
+
+          System.out.print(ciclos);
+          //System.out.print(", cambios=");System.out.println(cambios);
+          System.out.println(", "+costoInic);
+
+        }
+        if((ciclos>=50000)/*||(costoInic<=0)*/)finProceso=true;
+
+/*        if((costoInic<costoMinimo)&&(costoInic<100)){
+            System.out.print(ciclos);System.out.print(", ");
+            System.out.print(costoInic);System.out.print("\n");
+            costoMinimo=costoInic;
+            System.out.print("****************");System.out.print("\n");
+            cat1.imprimeCatalog();
+            cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+            System.out.print("****************");System.out.print("\n");
+        }
+*/
+        if((costoInic==costoMinimo)&&(ciclos-cicloUltimo>5000)){
+            cicloUltimo=ciclos;
+            System.out.print(ciclos);System.out.print(", ");
+            System.out.print(costoInic);System.out.print("\n");
+            costoMinimo=costoInic;
+            System.out.print("****************");System.out.print("\n");
+           // cat1.imprimeCatalog();
+            //cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+            System.out.print("****************");System.out.print("\n");
+        }
+
+      }while(!finProceso);
+
+      cat1.imprimeCatalog();
+      cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+
+      VectorAulas va=  cat1.aulas;
+      for(int i=0; i<va.size(); i++){
+        int empalm = ((Aula)cat1.aulas.elementAt(i)).cuentaEmpalmes();
+        if (empalm!=0){
+          System.out.print("Empalme de aula ");
+          System.out.print(((Aula)va.elementAt(i)).getClave()+"  ");
+          System.out.println(empalm);
+        }
+      }
+      VectorMaestros vm=  cat1.maestros;
+      for(int i=0; i<vm.size(); i++){
+        int empalm = ((Maestro)vm.elementAt(i)).cuentaEmpalmes();
+        if (empalm!=0){
+          System.out.print("Empalme de maestro ");
+          System.out.print(((Maestro)vm.elementAt(i)).getNombre()+"  ");
+          System.out.println(empalm);
+        }
+      }
+
+
+  }
+
+
+private Catalogo hillclimbing(Catalogo cat1, Individuo indEnt, int costoSalida){
+      cat1.borraAsignados();
+      cat1.asignaIndividuo(indEnt);
+
+      int ciclos=0;
+      Grupo gSel; //Grupo seleccionado para hacer cambio
+      int stPropu;//horario seleccionado
+      int stOrig;
+      int indxGpo;
+      int costoInic, costoFinal,cambios=0,cicloUltimo=0;;
+      int costoMinimo=100000;
+      boolean finProceso=false;
+
+      costoInic = costo(cat1);
+
+      do{
+        //Selecciona un grupo
+
+        indxGpo=genRandPP.nextInt(cat1.grupos.size());
+        gSel=(Grupo)cat1.grupos.elementAt(indxGpo);
+        stOrig = gSel.getHora(); //horario del grupo seleccionado
+
+        //Propone un horario nuevo al grupo seleccionado
+        stPropu=gSel.getOpcs()[genRandPP.nextInt(gSel.getOpcs().length)];
+
+        cat1.cambiaHora(indxGpo,stPropu);
+        costoFinal=costo(cat1);
+        ciclos++;
+        if((costoFinal>costoInic) ){
+           cat1.cambiaHora(indxGpo,stOrig);
+        }else{
+          costoInic=costoFinal;
+          cambios++;
+        }
+
+        if(ciclos%100==0){
+          this.imprimeCosto(cat1);
+          //System.out.print("ciclos=");
+
+          System.out.print(ciclos);
+          //System.out.print(", cambios=");System.out.println(cambios);
+          System.out.println(", "+costoInic);
+
+        }
+        if((ciclos>=50000)||(costoInic<=costoSalida))finProceso=true;
+
+/*        if((costoInic<costoMinimo)&&(costoInic<100)){
+            System.out.print(ciclos);System.out.print(", ");
+            System.out.print(costoInic);System.out.print("\n");
+            costoMinimo=costoInic;
+            System.out.print("****************");System.out.print("\n");
+            cat1.imprimeCatalog();
+            cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+            System.out.print("****************");System.out.print("\n");
+        }
+*/
+        if((costoInic==costoMinimo)&&(ciclos-cicloUltimo>5000)){
+            cicloUltimo=ciclos;
+            System.out.print(ciclos);System.out.print(", ");
+            System.out.print(costoInic);System.out.print("\n");
+            costoMinimo=costoInic;
+            System.out.print("****************");System.out.print("\n");
+           // cat1.imprimeCatalog();
+            //cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+            System.out.print("****************");System.out.print("\n");
+        }
+
+      }while(!finProceso);
+
+      cat1.imprimeCatalog();
+      cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+
+      VectorAulas va=  cat1.aulas;
+      for(int i=0; i<va.size(); i++){
+        int empalm = ((Aula)cat1.aulas.elementAt(i)).cuentaEmpalmes();
+        if (empalm!=0){
+          System.out.print("Empalme de aula ");
+          System.out.print(((Aula)va.elementAt(i)).getClave()+"  ");
+          System.out.println(empalm);
+        }
+      }
+      VectorMaestros vm=  cat1.maestros;
+      for(int i=0; i<vm.size(); i++){
+        int empalm = ((Maestro)vm.elementAt(i)).cuentaEmpalmes();
+        if (empalm!=0){
+          System.out.print("Empalme de maestro ");
+          System.out.print(((Maestro)vm.elementAt(i)).getNombre()+"  ");
+          System.out.println(empalm);
+        }
+      }
+
+      return cat1;
+  }
+
+
+/************************************************************************/
+
+  private void genetico1(){
+    int POBLMIN = 400;
+    int POBLMAX = 800;
+    int ELITE = 10;
+    double FACTMUT = 0.05;
+    int indxElem1, indxElem2, pivote1, pivote2;
+    Individuo elem1, elem2, nuevo1, nuevo2;
+    boolean finProceso=false;
+    int camada=0;
+
+    //Lee datos de entrada
+    Catalogo cat1 = new Catalogo("tabGrupos.txt", "tabMaes.dat",
+                                    "tabAulas.dat", "tipoHors.txt",
+                                    "tabSemCarr.txt", "tabMaterias.txt");
+
+    //Genera población inicial
+    Poblacion pob = new Poblacion();
+    Individuo indAux;
+    for(int i=0; i<POBLMIN; i++){
+      cat1.borraAsignados();
+      cat1.asignaHorRandom();
+      indAux = cat1.getIndividuo();
+      indAux.evalua(cat1);
+      pob.add(indAux);
+    }
+
+
+
+// Prueba de velocidad
+    int tlimit = 3000;
+    Individuo indAux2=(Individuo)pob.elementAt(2);
+    Individuo indAux3=(Individuo)pob.elementAt(3);
+
+
+
+
+    do{
+      //System.out.print("Mutación,  ");
+      //Mutacion
+      int gpoIndx, opcIndx, selec;
+      Grupo gpoAux;
+      Individuo indiviNuevo;
+      int tamañoInic = pob.size();
+      for(int i=0; i<tamañoInic; i++){
+        if(genRandPP.nextInt(10000)<=FACTMUT*10000){
+          indiviNuevo=(Individuo)((Individuo)pob.elementAt(i)).clone();
+          gpoIndx=genRandPP.nextInt(indiviNuevo.getGenes().length);
+          gpoAux=(Grupo)cat1.grupos.elementAt(gpoIndx);
+          selec=gpoAux.getOpcs()[genRandPP.nextInt(gpoAux.getOpcs().length)];
+          indiviNuevo.setGene(gpoIndx,selec);
+          indiviNuevo.evalua(cat1);
+          pob.add(indiviNuevo);
+        }
+      }
+
+
+      //Cruzamiento
+      //System.out.print("Cruza,  ");
+      int tamaño=cat1.grupos.size();
+      do{
+        indxElem1=genRandPP.nextInt(pob.size());
+        do{indxElem2=genRandPP.nextInt(pob.size());}while(indxElem1==indxElem2);
+        elem1=((Individuo)pob.elementAt(indxElem1));
+        elem2=((Individuo)pob.elementAt(indxElem2));
+        nuevo1=(Individuo)elem1.clone();
+        nuevo2=(Individuo)elem2.clone();
+
+        pivote1=genRandPP.nextInt(tamaño);
+        do{ pivote2=genRandPP.nextInt(tamaño); }while(pivote1==pivote2);
+        int inic=(pivote1<pivote2)? pivote1: pivote2;
+        int fin=(pivote1>pivote2)? pivote1: pivote2;
+
+        for(int i=inic; i<=fin; i++){
+          nuevo1.setGene(i,elem2.getGenes()[i]);
+          nuevo2.setGene(i,elem1.getGenes()[i]);
+        }
+        nuevo1.evalua(cat1);
+        nuevo2.evalua(cat1);
+        pob.add(nuevo1);
+        pob.add(nuevo2);
+
+      }while(pob.size()<POBLMAX);
+
+
+      //Seleccion
+      //System.out.println("Selecciona,  ");
+      pob.ordenaMenMay();
+      int costo1, costo2;
+      do{
+        //Ruleta
+
+        //Torneo
+        indxElem1 = genRandPP.nextInt(pob.size()-ELITE) + ELITE;
+        indxElem2 = genRandPP.nextInt(pob.size()-ELITE) + ELITE;
+        costo1=((Individuo)pob.elementAt(indxElem1)).getCostoTotal();
+        costo2=((Individuo)pob.elementAt(indxElem2)).getCostoTotal();
+        if( costo1 > costo2 ){
+              pob.remove(indxElem1);
+        }else if(costo1 < costo2){
+              pob.remove(indxElem2);
+        }
+        if( costo1 == costo2 ){
+          if(genRandPP.nextInt(2)==0) pob.remove(indxElem1);
+          else  pob.remove(indxElem2);
+        }
+      }while(pob.size()>POBLMIN);
+
+      int minimo=100000;
+      int maximo=0;
+      int promedio=0;
+      int indxMinimo=0;
+      int costo=0;
+      for(int i=0; i<pob.size(); i++){
+        costo=((Individuo)pob.elementAt(i)).getCostoTotal();
+        minimo= (costo<minimo)? costo : minimo;
+        maximo= (costo>maximo)? costo : maximo;
+        promedio += costo;
+      }
+      promedio=promedio/pob.size();
+      System.out.print(camada++ +",   "+minimo+",   "+promedio+",   "+maximo);
+
+      if(camada%10==0){
+        System.out.print(",  ini= "+pob.size());
+        pob.eliminaRepetidos();
+        System.out.println(",  fin= "+pob.size());
+      }else  System.out.println();
+
+      if(minimo<=42)finProceso=true;
+    }while(!finProceso);
+
+
+    for(int i=0; i<100; i++){
+      indAux=(Individuo)pob.elementAt(i);
+      System.out.print(i+",   ");
+      for(int j=0; j<indAux.getGenes().length; j++){
+        System.out.print(indAux.getGenes()[j] + ", ");
+      }
+      System.out.println();
+    }
+
+  }// end geneticol()
+
+
+
+/************************************************************************/
+  private void tabu(){
+
+      int nVecindad=20;
+      int nLista=500;
+      Individuo mejorSolucion, indActual, indPropuesto;
+      Catalogo cat1 = new Catalogo("tabGrupos.txt", "tabMaes.dat",
+                                    "tabAulas.dat", "tipoHors.txt",
+                                    "tabSemCarr.txt", "tabMaterias.txt");
+      int ciclos=0;
+
+      cat1.verificaDatos();
+      cat1.asignaHorRandom();
+
+      indActual = cat1.getIndividuo();
+      cat1 = hillclimbing(cat1, indActual, 386);
+
+      indActual = cat1.getIndividuo();
+      indActual.evalua(cat1);
+      mejorSolucion=(Individuo)indActual.clone();
+
+      Poblacion listaTabu = new Poblacion();// lista tabú
+      listaTabu.add(indActual);
+
+      boolean finProceso=false;
+
+      do{
+        Poblacion vecindario = cat1.mejorVecinoTotal(nVecindad);
+
+/*
+//imprime lista vecinos ylista tabu;
+        System.out.println("vecinos = "+vecindario.size());
+        for(int a=0; a<vecindario.size(); a++){
+          System.out.println("V"+a+"=,"+((Individuo)vecindario.elementAt(a)).getCostoTotal()+", key=,"+((Individuo)vecindario.elementAt(a)).getLlave());
+        }
+        System.out.println();
+        for(int a=0; a<listaTabu.size(); a++){
+          System.out.println("T"+a+"=,"+((Individuo)listaTabu.elementAt(a)).getCostoTotal()+", key=,"+((Individuo)listaTabu.elementAt(a)).getLlave());
+        }
+
+*/
+
+        for(int i=0; i<nVecindad; i++){
+          indActual = (Individuo)vecindario.elementAt(i);
+          if(listaTabu.contiene(indActual)){
+            //individuo contenido en tabu
+            continue;
+          }else{
+            listaTabu.add(indActual);
+            if(listaTabu.size()==nLista+1){
+              listaTabu.removeElementAt(0);
+            }
+            break;
+          }
+        }//for i
+        cat1.asignaIndividuo(indActual);
+
+        System.out.println(ciclos++ +", "+indActual.getCostoTotal());
+      }while(!finProceso);
+
+      cat1.imprimeCatalog();
+      cat1.semCarrs.muestra(cat1.grupos, cat1.horas);
+
+      VectorAulas va=  cat1.aulas;
+      for(int i=0; i<va.size(); i++){
+        int empalm = ((Aula)cat1.aulas.elementAt(i)).cuentaEmpalmes();
+        if (empalm!=0){
+          System.out.print("Empalme de aula ");
+          System.out.print(((Aula)va.elementAt(i)).getClave()+"  ");
+          System.out.println(empalm);
+        }
+      }
+      VectorMaestros vm=  cat1.maestros;
+      for(int i=0; i<vm.size(); i++){
+        int empalm = ((Maestro)vm.elementAt(i)).cuentaEmpalmes();
+        if (empalm!=0){
+          System.out.print("Empalme de maestro ");
+          System.out.print(((Maestro)vm.elementAt(i)).getNombre());
+          System.out.println(empalm);
+        }
+      }
+
+
+  }
+
+
+
+}

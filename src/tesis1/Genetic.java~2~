@@ -1,0 +1,70 @@
+package tesis1;
+import tesis1.datos.*;
+
+public class Genetic {
+  //VectorGrupos grupos;
+  //VectorMaestros maestros;
+  //VectorAulas aulas;
+  private VectorSlotTime horas;
+
+  /**Construct the application*/
+  public Genetic() {
+
+    try {
+      /*Obtiene información de los tipos de horarios del archivo tipoHors.txt*/
+      VectorSlotTime horas = new VectorSlotTime("tipoHors.txt");
+
+    testImprimeSlotsTime(horas);
+
+      // Obtiene información de los maestros del archivo tabMaes.dat
+      // VectorMaestros maestros = new VectorMaestros("tabMaes.dat");
+
+      //VectorGrupos grupos = new VectorGrupos();
+      //grupos.ObtenDatosGrupos("tabMas.dat");
+
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  /**Main method*/
+  public static void main(String[] args) {
+    Genetic ag = new Genetic();
+  }
+
+  private void testImprimeSlotsTime(VectorSlotTime horas){
+  //Imprime todos los slotTime`s
+    int a, b;
+    int cpa = horas.size();
+    for(a=0;a<cpa-1;a++)for(b=a+1;b<cpa;b++){
+      System.out.print(((SlotTime)horas.elementAt(a)).getOffsetStringHora());
+      System.out.print(((SlotTime)horas.elementAt(a)).getDescripcion()+"   ");
+      System.out.print(((SlotTime)horas.elementAt(b)).getOffsetStringHora());
+      System.out.println(((SlotTime)horas.elementAt(b)).getDescripcion());
+
+      if( ((SlotTime)horas.elementAt(a)).
+                              isEmpalme( (SlotTime)horas.elementAt(b) )
+      ){System.out.println("Empalme");}       //then "empalme"
+      else{System.out.println("No Empalme");}   //else "no empalme"
+
+      //imprime matrices;
+      System.out.println();
+      testImprimeMatrizSlotTime(a,horas);
+      //testImprimeMatrizSlotTime(b,horas);
+    }
+
+  }
+
+  private void testImprimeMatrizSlotTime(int a, VectorSlotTime horas){
+    int [][] ar1= ((SlotTime)horas.elementAt(a)).getMascaraArray();
+    for(int r=0; r<6; r ++){
+      for(int c=0; c<5;c++){
+        System.out.print(ar1[r][c]);
+      }
+      System.out.println();
+    }System.out.println();
+  }
+
+}

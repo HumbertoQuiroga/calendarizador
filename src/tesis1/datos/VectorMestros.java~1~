@@ -1,0 +1,25 @@
+package tesis1.datos;
+
+import java.util.Vector;
+import tesis1.io.*;
+
+/**
+ * Title:
+ * Description:
+ * Copyright:    Copyright (c) 2002
+ * Company:
+ * @author
+ * @version 1.0
+ */
+
+public class VectorMestros extends Vector {
+
+  public VectorMestros(String archMaestros) {
+    super(1,1);
+    leeArchMaestros(archMaestros);
+  }
+
+  private void leeArchMaestros(String arch){
+
+  }
+}

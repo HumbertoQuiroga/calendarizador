@@ -1,0 +1,249 @@
+package tesis1.datos;
+
+import java.util.Random;
+import tesis1.genetic.*;
+
+/**
+ * Title:        Asignación de horarios
+ * Description:
+ * Copyright:    Copyright (c) 2002
+ * Company:      ITSON
+ * @author Adolfo Espinoza
+ * @version 1.0
+ */
+
+public class Catalogo implements Cloneable{
+  public VectorGrupos grupos;
+  public VectorMaestros maestros;
+  public VectorAulas aulas;
+  public VectorSlotTime horas;
+  public VectorSemCarrs semCarrs;
+  public VectorMaterias materias;
+  private Random genRand = new Random(4);
+
+  public Catalogo(VectorGrupos grups, VectorMaestros maests,
+                    VectorAulas auls, VectorSlotTime hors,
+                    VectorSemCarrs seCs, VectorMaterias mats ){
+    this.grupos=grups;
+    this.maestros=maests;
+    this.aulas=auls;
+    this.horas=hors;
+    this.semCarrs=seCs;
+    this.materias = mats;
+  }
+
+  public Catalogo(String archGrps, String archMaests,
+                    String archAuls, String archHors,
+                    String archSeCs, String archMats){
+    try {
+      System.out.println("Lee Horarios....");
+      /*Obtiene información de los tipos de horarios del archivo "archHors" */
+      horas = new VectorSlotTime(archHors);
+
+      System.out.println("Lee Maestros....");
+      /*Obtiene información de los maestros del archivo "archMaests" */
+      maestros = new VectorMaestros(archMaests);
+
+      System.out.println("Lee Aulas....");
+      /*Obtiene información de las aulas del archivo "archAuls" */
+      aulas = new VectorAulas(archAuls);
+
+      System.out.println("Lee Materias....");
+      /*Obtiene información de las aulas del archivo "archMats" */
+      materias = new VectorMaterias(archMats);
+
+      System.out.println("Lee Grupos....");
+      /*Obtiene información de los grupos del archivo "archGrps" */
+      grupos = new VectorGrupos(archGrps, maestros);
+
+      /*Asigna el tipo de aula que le corresponde a cada grupo*/
+      grupos.asignaAulas(aulas, materias);
+
+      /*Asigna el vector de SlotTimes válidos para cada grupo
+      considerando tipos de horarios y disponibilidad de maestros*/
+      grupos.asignaOpcsSlotTimes(horas, maestros, materias);
+
+      System.out.println("Lee Semestres-Carreras....");
+      /*Obtiene información de los grupos del archivo "archSeCs" */
+      semCarrs = new VectorSemCarrs(archSeCs,grupos);
+      semCarrs.setSlotsTime(horas);
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+
+  public Object clone(){
+    VectorGrupos    gruposNuevo = (VectorGrupos)this.grupos.clone();
+    VectorMaestros  maestrosNuevo = (VectorMaestros)this.maestros.clone();
+    VectorAulas     aulasNuevo = (VectorAulas )this.aulas.clone();
+    VectorSlotTime  horasNuevo = (VectorSlotTime)this.horas.clone();
+    VectorSemCarrs  semCarrsNuevo= (VectorSemCarrs)this.semCarrs.clone() ;
+    VectorMaterias  matsNuevo= (VectorMaterias)this.materias.clone() ;
+
+    Catalogo catNuevo = new Catalogo( gruposNuevo, maestrosNuevo,
+                                      aulasNuevo, horasNuevo,
+                                      semCarrsNuevo, matsNuevo);
+    return catNuevo;
+  }
+
+  public int getEmpalmesMaestros(){
+    return maestros.getEmpalmes();
+  }
+
+  public int getEmpalmesAulas(){
+    return aulas.getEmpalmes();
+  }
+
+
+  public int getBloqueaSemCarr(){
+    return  semCarrs.getBloqueads();
+  }
+
+
+  public void imprimeCatalog(){
+    int n=grupos.size();
+    Grupo element;
+    for(int i=0; i<n; i++){
+      element= (Grupo)grupos.elementAt(i);
+      Materia m = (Materia)materias.elementAt(materias.getIndexClave(element.getClave()));
+
+      System.out.print( element.getClave() + ",  G" );
+      System.out.print( element.getNum());
+      System.out.print(",\t"+m.getDescrip()+",\t");
+
+      int y = element.getMaestro();
+
+      SlotTime s2 = (SlotTime)horas.elementAt(element.getHora());
+      System.out.print( s2.getOffsetStringHora()+s2.getDescripcion()+",  ");
+
+      System.out.print( ((Maestro)maestros.elementAt(y)).getNombre()+",\t\t");
+
+      y=element.getAula();
+      System.out.println( ((Aula)aulas.elementAt(y)).getClave() );
+
+      /*Muestra opciones de horario para cada grupo
+      int [] opcs = element.getOpcs();
+      int nq = opcs.length;
+
+      for(int iq=0; iq<nq; iq++){
+        SlotTime s = (SlotTime)horas.elementAt(opcs[iq]);
+        System.out.print(s.getOffsetStringHora()+s.getDescripcion()+",  ");
+      }System.out.println("\n");
+      */
+    }
+  }
+
+  public void asignaHorRandom(){
+    for(int i=0; i<grupos.size(); i++){
+      Grupo g = (Grupo)grupos.elementAt(i);
+      int h = g.getOpcs()[genRand.nextInt(g.getOpcs().length)];
+      asignaHora(i,h);
+    }
+  }
+
+  public void cambiaHora(int grup, int sT){
+    desasignaHora(grup);
+    asignaHora(grup, sT);
+  }
+
+  /**
+   * Asigna al grupo grup el horario sT. El maestro y el aula relacionados se
+   * ocupan a esa hora.
+   */
+  public void asignaHora(int grup, int sT){
+    int aul = ((Grupo)grupos.elementAt(grup)).getAula();
+    int maes = ((Grupo)grupos.elementAt(grup)).getMaestro();
+    ((Aula)aulas.elementAt(aul)).asigna((SlotTime)horas.elementAt(sT));
+    ((Maestro)maestros.elementAt(maes)).asigna((SlotTime)horas.elementAt(sT));
+    ((Grupo)grupos.elementAt(grup)).setHora(sT);
+  }
+
+  /**
+   * Deasigna al grupo grup. El maestro y el aula relacionados se
+   * les desocupa esa hora.
+   */
+  public void desasignaHora(int grup){
+    int sT = ((Grupo)grupos.elementAt(grup)).getHora();
+    int aul = ((Grupo)grupos.elementAt(grup)).getAula();
+    int maes = ((Grupo)grupos.elementAt(grup)).getMaestro();
+    ((Aula)aulas.elementAt(aul)).desAsigna((SlotTime)horas.elementAt(sT));
+    ((Maestro)maestros.elementAt(maes)).desAsigna((SlotTime)horas.elementAt(sT));
+    //((Grupo)grupos.elementAt(grup)).setHora(null);
+  }
+
+
+  public void verificaDatos(){
+    Grupo gpoAux;
+    int cont=0;
+    for(int i=0; i<grupos.size();i++){
+      gpoAux=(Grupo)grupos.elementAt(i);
+
+      if(gpoAux.getOpcs().length==0){
+        System.out.println("No hay opciones para el grupo:");
+        System.out.println(gpoAux.getClave()+"  "+
+          ((Maestro)maestros.elementAt(gpoAux.getMaestro())).getNombre());
+        cont++;
+      }
+    }
+    if(cont>0){
+      System.exit(0);
+    }
+  }
+
+  public void borraAsignados(){
+    this.maestros.desasignaTodos();
+    this.aulas.desasignaTodos();
+  }
+
+  public Individuo getIndividuo(){
+    return grupos.getIndividuo();
+  }
+
+  /** Asigna al catalogo de grupos el horario dado por los genes de "Individuo"*/
+  public void asignaIndividuo(Individuo indiv){
+    for(int i=0; i<grupos.size(); i++){
+      this.asignaHora(i,indiv.getGenes()[i]);
+    }
+  }
+
+
+  public Individuo mejorVecinoTotal(){
+    Individuo estadoActual;
+    Grupo gSel;
+    int costoMinimo=100000, stOrig;
+    Individuo mejorVecino = new Individuo();
+
+    for(int g=0; g<this.grupos.size(); g++){
+      gSel=(Grupo)this.grupos.elementAt(g);
+
+      stOrig = gSel.getHora(); //horario inicial del grupo seleccionado
+      //Propone un horario nuevo al grupo seleccionado
+      for(int h=0; h<gSel.getOpcs().length; h++){
+        if(gSel.getOpcs()[h] == stOrig) continue;
+        this.cambiaHora(g,h);
+        if(this.costo()<costoMinimo){
+          costoMinimo=this.costo();
+          mejorVecino=this.getIndividuo();
+        }
+        this.cambiaHora(g,stOrig);
+      }
+    }
+    return mejorVecino;
+  }
+
+/*  public Individuo mejorVecinoRnd(int n){
+  }
+*/
+
+  public int costo(){
+    int empAulas =  this.aulas.getEmpalmes(); //medias horas empalmadas
+    int empMaestro = this.maestros.getEmpalmes();//medias horas empalmadas
+    int empGrpsSC = this.semCarrs.getBloqueads(); /*grupos que no estan en una
+                                      trayectorioa de horario válido*/
+    int turnos = this.semCarrs.costoTurnos();
+    int hrsContinuas = this.maestros.getHrsContinuas();
+
+    return empAulas + empMaestro + empGrpsSC + hrsContinuas + turnos;
+  }
+}
