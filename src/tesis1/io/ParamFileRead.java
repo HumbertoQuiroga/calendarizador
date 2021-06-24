@@ -15,7 +15,7 @@ public class ParamFileRead {
 
   public ParamFileRead(String arch) {
      
-    arch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tipoHors.txt";
+    //arch = ".\\real\\tipoHors.txt";
      
     try{
       hors = new BufferedReader(new FileReader(arch));

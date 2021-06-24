@@ -78,4 +78,10 @@ public class Grupo implements Cloneable{
     return opcs;
   }
 
+    @Override
+    public String toString() {
+        return "Grupo{" + "clave=" + clave + ", num=" + num + ", maestro=" + maestro + ", aula=" + aula + ", hora=" + hora + ", opcs=" + opcs + '}';
+    }
+
+  
 }

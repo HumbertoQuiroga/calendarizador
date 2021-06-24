@@ -2,6 +2,7 @@ package tesis1.datos;
 
 import java.util.Vector;
 import java.io.*;
+import tesis1.io.ParamFileRead;
 
 /**
  * Title:        Asignaci�n de horarios
@@ -38,8 +39,8 @@ public class VectorMaestros extends Vector implements Cloneable{
    public void leeArchMaestros(String nomArch){
      //agregado por HQ 
      
-    nomArch = "‪C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabMaes.dat";
-       
+    //nomArch = "‪.\\real\\tabMaes.dat";
+    //ParamFileRead hors = new ParamFileRead(nomArch);  
     int longitud;
     DataInput arch;
     MaestroArch maestroEnt;
@@ -56,13 +57,13 @@ public class VectorMaestros extends Vector implements Cloneable{
         maestroEnt.cargarMaestro(arch);  // Asigna valores de archivo
         maestro = new Maestro();
         maestro.copiaDesde(maestroEnt);  // copia datos de MaestroEnt a Maestro
-
+        System.out.println(maestro.toString());
         this.addElement(maestro);      // Lo agrega al vector
       }
 
     }
     catch(IOException e) {
-      System.out.print("\n Error leyendo archivo de datos de maestros \n");
+      System.out.println("Error leyendo archivo de datos de maestros, "+e.getMessage());
     }
   }
 

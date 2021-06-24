@@ -60,9 +60,9 @@ public class SemCarrera extends Vector {
           traysValidas[i]++;
           totTrays++;
           //Verifica si el horario es matutino o vespertino
-          short turno = ((SlotTime)horas.elementAt(hora)).getTurno();
+          short turno = ((SlotTime)horas.get(hora)).getTurno();
           for(int j=0; j< horsOcup.length; j++){
-            if(((SlotTime)horas.elementAt(horsOcup[j])).getTurno()!=turno){
+            if(((SlotTime)horas.get(horsOcup[j])).getTurno()!=turno){
               turno=3;//turnos diferentes;
               break;
             }

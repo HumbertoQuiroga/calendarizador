@@ -20,7 +20,7 @@ public class VectorMaterias extends Vector implements Cloneable{
 
   private void leeArchMaterias(String arch){
       
-    arch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabMaterias.txt";
+    //arch = ".\\real\\tabMaterias.txt";
       
     String params [];
     int numParams;
@@ -35,6 +35,7 @@ public class VectorMaterias extends Vector implements Cloneable{
         params[2]=params[2].substring(0,params[2].length()-1);
         buff.setTipoHors( Long.parseLong(params[2],16) );
         buff.setDescrip( params[3] );
+        System.out.println(buff.toString());
         this.addElement(buff); // agrega nueva materia al vector
       }
     }

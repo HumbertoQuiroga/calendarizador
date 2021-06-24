@@ -1,6 +1,6 @@
 package tesis1.datos;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import tesis1.io.*;
 
 /**
@@ -12,39 +12,35 @@ import tesis1.io.*;
  * @version 1.0
  */
 
-public class VectorSlotTime extends Vector implements Cloneable{
+public class VectorSlotTime extends ArrayList<SlotTime> implements Cloneable{
   boolean empalmes[][]; // matriz de empalmes.
 
   public VectorSlotTime(String archHors) {
-    super(1,1);
+    //super(1,1);
     leeArchSlotTimes(archHors);
     //Inicializa la matriz de empalmes
     empalmes = new boolean[this.size()][this.size()];
     for(int i=0;i<this.size();i++)for(int j=0;j<this.size();j++){
-      this.empalmes[i][j] =((SlotTime)this.elementAt(i)).isEmpalme
-                    ( (SlotTime)this.elementAt(j) );
+      this.empalmes[i][j] =(this.get(i)).isEmpalme(this.get(j));
     }
 
   }
 
   public VectorSlotTime() {
-    super(1,1);
+    //super(1,1);
   }
 
 
-  public Object clone(){
+  /*public Object clone(){
     VectorSlotTime aux = new VectorSlotTime();
     int n=this.size();
     for(int i=0; i<n; i++){
       aux.addElement( ((SlotTime)this.elementAt(i)).clone() );
     }
     return aux;
-  }
+  }*/
 
   private void leeArchSlotTimes(String arch){
-      
-    
-      
     String params [];
     int numParams;
     ParamFileRead hors = new ParamFileRead(arch);
@@ -58,10 +54,10 @@ public class VectorSlotTime extends Vector implements Cloneable{
         buff.setDescripcion(params[3]);
         buff.setMascara(params[2]);
         buff.setTurno();
-System.out.print(this.size());System.out.print(", ");
-System.out.print(buff.getOffsetStringHora());System.out.print(buff.getDescripcion());
-System.out.print(", ");System.out.println(buff.getTurno());
-        this.addElement(buff); // agrega nuevo SlotTime al vector
+     System.out.print(this.size());System.out.print(", ");
+     System.out.print(buff.getOffsetStringHora());System.out.print(buff.getDescripcion());
+        System.out.print(", ");System.out.println(buff.getTurno());
+        this.add(buff); // agrega nuevo SlotTime al vector
       }
     }
   }
@@ -75,9 +71,9 @@ System.out.print(", ");System.out.println(buff.getTurno());
     for(int tipo=0; tipoHors!=0; tipo++){
       if(tipoHors%2==1){
         for(int i=0; i<nHors; i++){
-          if( tipo == ((SlotTime)this.elementAt(i)).getTipo()){
+          if( tipo == this.get(i).getTipo()){
           //horario valido para la materia.
-            if(maest.isFacti((SlotTime)this.elementAt(i))){
+            if(maest.isFacti(this.get(i))){
             //horario factible para el maestro.
               horsFacts[contHrsFacts++]=i;
             }

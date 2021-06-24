@@ -22,4 +22,11 @@ public class ElementoDeSemCarr {
     in=i;
     out=o;
   }
+
+    @Override
+    public String toString() {
+        return "ElementoDeSemCarr{" + "grupo=" + grupo + ", in=" + in + ", out=" + out + ", n=" + n + '}';
+    }
+  
+  
 }

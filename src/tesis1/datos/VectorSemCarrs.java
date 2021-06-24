@@ -38,7 +38,7 @@ public class VectorSemCarrs extends Vector implements Cloneable{
 
   private void leeArchSemCarrs(String arch, VectorGrupos grupos ){
       //agregado por HQ
-    arch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabSemCarr.txt";
+   //arch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabSemCarr.txt";
       
     String params [];
     int numParams;
@@ -57,9 +57,9 @@ public class VectorSemCarrs extends Vector implements Cloneable{
         for(int j=0; j<grupos.size(); j++){
           if(((Grupo)grupos.elementAt(j)).getClave().equals(params[1])){
           // Se agrega un grupo al semestre carrera
-            semCarr.add(
-              new ElementoDeSemCarr(j,  Integer.parseInt(params[2]),
-                                        Integer.parseInt(params[3]) )   );
+            ElementoDeSemCarr elementoDeSemCarr =  new ElementoDeSemCarr(j,  Integer.parseInt(params[2]),Integer.parseInt(params[3]));
+              System.out.println(elementoDeSemCarr.toString());
+            semCarr.add(elementoDeSemCarr);
           }
         }//end for j
       }// if numParams
@@ -121,8 +121,8 @@ public class VectorSemCarrs extends Vector implements Cloneable{
         System.out.print(", \t");
         System.out.print(((Grupo)grupos.elementAt(gp)).getHora());
         System.out.print(", \t");
-        System.out.print( ((SlotTime)vslt.elementAt(((Grupo)grupos.elementAt(gp)).getHora())).getOffsetStringHora()+
-                          ((SlotTime)vslt.elementAt(((Grupo)grupos.elementAt(gp)).getHora())).getDescripcion()  );
+        System.out.print( ((SlotTime)vslt.get(((Grupo)grupos.elementAt(gp)).getHora())).getOffsetStringHora()+
+                          ((SlotTime)vslt.get(((Grupo)grupos.elementAt(gp)).getHora())).getDescripcion()  );
         System.out.print(", \t");
         System.out.print(((Grupo)grupos.elementAt(gp)).getClave());
         System.out.print(", \t");

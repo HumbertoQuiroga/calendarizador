@@ -75,4 +75,11 @@ public class Maestro extends Recurso implements Cloneable{
     this.clave=maestroEnt.getID();
   }
 
+    @Override
+    public String toString() {
+        return "Maestro{" + "nombre=" + nombre + ", clave=" + clave + '}';
+    }
+
+  
+  
 }

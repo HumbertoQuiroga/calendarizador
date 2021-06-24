@@ -33,8 +33,8 @@ public class VectorGrupos extends Vector implements Cloneable{
 
   private void leeArchGrupos(String arch, VectorMaestros maestros){
      //agregado por HQ 
-    arch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabGrupos.txt"; 
-     
+    //arch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabGrupos.txt"; 
+    
     String params [];
     int numParams;
     ParamFileRead grps = new ParamFileRead(arch);
@@ -49,7 +49,7 @@ public class VectorGrupos extends Vector implements Cloneable{
         //Coloca el indice de la clave en el atributo "maestro" del
         //objeto "grupo".
         buff.setMaestro( maestros.getIndexClave(params[2]) );
-
+          System.out.println(buff.toString());
         this.addElement(buff); // agrega nuevo grupo al vector
       }
     }

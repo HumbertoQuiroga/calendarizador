@@ -35,7 +35,7 @@ public class VectorAulas extends Vector implements Cloneable{
 
   public void leeArchAulas(String nomArch){
       //agregado por HQ
-    nomArch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabAulas.dat";
+    //nomArch = "C:\\Users\\hq82\\Documents\\NetBeansProjects\\Calendarizador\\real\\tabAulas.dat";
       
     int longitud;
     DataInput arch;
@@ -53,7 +53,7 @@ public class VectorAulas extends Vector implements Cloneable{
         aulaEnt.cargarAula(arch);  // Asigna valores de archivo
         aula = new Aula();
         aula.copiaDesde(aulaEnt);  // copia datos de AulaEnt a Aula
-
+        System.out.println(aula.toString());
         this.addElement(aula);      // Lo agrega al vector
       }
     }

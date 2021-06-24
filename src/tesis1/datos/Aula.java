@@ -43,4 +43,10 @@ public class Aula extends Recurso implements Cloneable{
     this.clave=aulaEnt.getClave();
   }
 
+    @Override
+    public String toString() {
+        return "Aula{" + "clave=" + clave + '}';
+    }
+
+  
 }

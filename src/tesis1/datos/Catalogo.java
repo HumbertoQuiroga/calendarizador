@@ -69,6 +69,7 @@ public class Catalogo implements Cloneable{
       semCarrs = new VectorSemCarrs(archSeCs,grupos);
       semCarrs.setSlotsTime(horas);
     }catch(Exception e) {
+        System.out.println("Error. "+ e.getMessage());
     }
   }
 
@@ -114,7 +115,7 @@ public class Catalogo implements Cloneable{
 
       int y = element.getMaestro();
 
-      SlotTime s2 = (SlotTime)horas.elementAt(element.getHora());
+      SlotTime s2 = (SlotTime)horas.get(element.getHora());
       System.out.print( s2.getOffsetStringHora()+s2.getDescripcion()+",  ");
 
       System.out.print( ((Maestro)maestros.elementAt(y)).getNombre()+",\t\t");
@@ -147,8 +148,8 @@ public class Catalogo implements Cloneable{
   public void asignaHora(int grup, int sT){
     int aul = ((Grupo)grupos.elementAt(grup)).getAula();
     int maes = ((Grupo)grupos.elementAt(grup)).getMaestro();
-    ((Aula)aulas.elementAt(aul)).asigna((SlotTime)horas.elementAt(sT));
-    ((Maestro)maestros.elementAt(maes)).asigna((SlotTime)horas.elementAt(sT));
+    ((Aula)aulas.elementAt(aul)).asigna((SlotTime)horas.get(sT));
+    ((Maestro)maestros.elementAt(maes)).asigna((SlotTime)horas.get(sT));
     ((Grupo)grupos.elementAt(grup)).setHora(sT);
   }
 
@@ -162,8 +163,8 @@ public class Catalogo implements Cloneable{
     int sT = ((Grupo)grupos.elementAt(grup)).getHora();
     int aul = ((Grupo)grupos.elementAt(grup)).getAula();
     int maes = ((Grupo)grupos.elementAt(grup)).getMaestro();
-    ((Aula)aulas.elementAt(aul)).desAsigna((SlotTime)horas.elementAt(sT));
-    ((Maestro)maestros.elementAt(maes)).desAsigna((SlotTime)horas.elementAt(sT));
+    ((Aula)aulas.elementAt(aul)).desAsigna((SlotTime)horas.get(sT));
+    ((Maestro)maestros.elementAt(maes)).desAsigna((SlotTime)horas.get(sT));
     //((Grupo)grupos.elementAt(grup)).setHora(null);
   }
 

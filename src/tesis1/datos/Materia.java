@@ -55,11 +55,11 @@ System.out.print("\n\n"+this.clave+" \n");
     for(int tipo=0; tipoHors!=0; tipo++){
       if(tipoHors%2==1){
         for(int i=0; i<nHors; i++){
-          if( tipo == ((SlotTime)horas.elementAt(i)).getTipo()){
+          if( tipo == ((SlotTime)horas.get(i)).getTipo()){
             horsFacts[contHrsFacts++]=i;
 
-System.out.print(((SlotTime)horas.elementAt(i)).getOffsetStringHora()+
-((SlotTime)horas.elementAt(i)).getDescripcion()+",  ");
+System.out.print(((SlotTime)horas.get(i)).getOffsetStringHora()+
+((SlotTime)horas.get(i)).getDescripcion()+",  ");
           }
         }
       }
@@ -70,4 +70,10 @@ System.out.print(((SlotTime)horas.elementAt(i)).getOffsetStringHora()+
     return arrSalida;
   }
 
+    @Override
+    public String toString() {
+        return "Materia{" + "clave=" + clave + ", descripcion=" + descripcion + ", tipoAula=" + tipoAula + ", tipoHors=" + tipoHors + '}';
+    }
+
+  
 }
