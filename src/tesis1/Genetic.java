@@ -94,19 +94,19 @@ public class Genetic {
 
         VectorAulas va = cat1.aulas;
         for (int i = 0; i < va.size(); i++) {
-            int empalm = ((Aula) cat1.aulas.elementAt(i)).cuentaEmpalmes();
+            int empalm = ((Aula) cat1.aulas.get(i)).cuentaEmpalmes();
             if (empalm != 0) {
                 System.out.print("Empalme de aula ");
-                System.out.print(((Aula) va.elementAt(i)).getClave() + "  ");
+                System.out.print(((Aula) va.get(i)).getClave() + "  ");
                 System.out.println(empalm);
             }
         }
         VectorMaestros vm = cat1.maestros;
         for (int i = 0; i < vm.size(); i++) {
-            int empalm = ((Maestro) vm.elementAt(i)).cuentaEmpalmes();
+            int empalm = ((Maestro) vm.get(i)).cuentaEmpalmes();
             if (empalm != 0) {
                 System.out.print("Empalme de maestro ");
-                System.out.print(((Maestro) vm.elementAt(i)).getNombre() + "  ");
+                System.out.print(((Maestro) vm.get(i)).getNombre() + "  ");
                 System.out.println(empalm);
             }
         }
@@ -130,7 +130,7 @@ public class Genetic {
             //Selecciona un grupo
 
             indxGpo = genRandPP.nextInt(cat1.grupos.size());
-            gSel = (Grupo) cat1.grupos.elementAt(indxGpo);
+            gSel = (Grupo) cat1.grupos.get(indxGpo);
             stOrig = gSel.getHora(); //horario del grupo seleccionado
 
             //Propone un horario nuevo al grupo seleccionado
@@ -194,19 +194,19 @@ public class Genetic {
 
         VectorAulas va = cat1.aulas;
         for (int i = 0; i < va.size(); i++) {
-            int empalm = ((Aula) cat1.aulas.elementAt(i)).cuentaEmpalmes();
+            int empalm = ((Aula) cat1.aulas.get(i)).cuentaEmpalmes();
             if (empalm != 0) {
                 System.out.print("Empalme de aula ");
-                System.out.print(((Aula) va.elementAt(i)).getClave() + "  ");
+                System.out.print(((Aula) va.get(i)).getClave() + "  ");
                 System.out.println(empalm);
             }
         }
         VectorMaestros vm = cat1.maestros;
         for (int i = 0; i < vm.size(); i++) {
-            int empalm = ((Maestro) vm.elementAt(i)).cuentaEmpalmes();
+            int empalm = ((Maestro) vm.get(i)).cuentaEmpalmes();
             if (empalm != 0) {
                 System.out.print("Empalme de maestro ");
-                System.out.print(((Maestro) vm.elementAt(i)).getNombre() + "  ");
+                System.out.print(((Maestro) vm.get(i)).getNombre() + "  ");
                 System.out.println(empalm);
             }
         }
@@ -239,7 +239,7 @@ public class Genetic {
 
             //Selecciona un grupo
             indxGpo = genRandPP.nextInt(cat1.grupos.size());
-            gSel = (Grupo) cat1.grupos.elementAt(indxGpo);
+            gSel = (Grupo) cat1.grupos.get(indxGpo);
             stOrig = gSel.getHora(); //horario del grupo seleccionado
             //Propone un horario nuevo al grupo seleccionado
             stPropu = gSel.getOpcs()[genRandPP.nextInt(gSel.getOpcs().length)];
@@ -332,9 +332,9 @@ public class Genetic {
             int tamañoInic = pob.size();
             for (int i = 0; i < tamañoInic; i++) {
                 if (genRandPP.nextInt(10000) <= FACTMUT * 10000) {
-                    indiviNuevo = (Individuo) ((Individuo) pob.elementAt(i)).clone();
+                    indiviNuevo = (Individuo) ((Individuo) pob.get(i)).clone();
                     gpoIndx = genRandPP.nextInt(indiviNuevo.getGenes().length);
-                    gpoAux = (Grupo) cat1.grupos.elementAt(gpoIndx);
+                    gpoAux = (Grupo) cat1.grupos.get(gpoIndx);
                     selec = gpoAux.getOpcs()[genRandPP.nextInt(gpoAux.getOpcs().length)];
                     indiviNuevo.setGene(gpoIndx, selec);
 
@@ -358,8 +358,8 @@ public class Genetic {
                 do {
                     indxElem2 = genRandPP.nextInt(pob.size());
                 } while (indxElem1 == indxElem2);
-                elem1 = ((Individuo) pob.elementAt(indxElem1));
-                elem2 = ((Individuo) pob.elementAt(indxElem2));
+                elem1 = ((Individuo) pob.get(indxElem1));
+                elem2 = ((Individuo) pob.get(indxElem2));
                 nuevo1 = (Individuo) elem1.clone();
                 nuevo2 = (Individuo) elem2.clone();
 
@@ -412,8 +412,8 @@ public class Genetic {
                 costo1=((Individuo)pob.elementAt(indxElem1)).getCostoTotal();
                 costo2=((Individuo)pob.elementAt(indxElem2)).getCostoTotal();
                  */
-                costo1 = ((Individuo) pob.elementAt(indxElem1)).getCosto().getCostoTotal();
-                costo2 = ((Individuo) pob.elementAt(indxElem2)).getCosto().getCostoTotal();
+                costo1 = ((Individuo) pob.get(indxElem1)).getCosto().getCostoTotal();
+                costo2 = ((Individuo) pob.get(indxElem2)).getCosto().getCostoTotal();
 
                 if (costo1 > costo2) {
                     pob.remove(indxElem1);
@@ -439,7 +439,7 @@ public class Genetic {
                 /*
                 costo=((Individuo)pob.elementAt(i)).getCostoTotal();
                  */
-                costo = ((Individuo) pob.elementAt(i)).getCosto().getCostoTotal();
+                costo = ((Individuo) pob.get(i)).getCosto().getCostoTotal();
 
                 if (costo < minimo) {
                     minimo = costo;
@@ -453,7 +453,7 @@ public class Genetic {
             promedio = promedio / pob.size();
             System.out.print(camada++ + ",   " + minimo + ", " + promedio + ", " + maximo + ",   ");
 
-            ((Individuo) pob.elementAt(indxMinimo)).getCosto().imprimeCosto();
+            ((Individuo) pob.get(indxMinimo)).getCosto().imprimeCosto();
 
             if (camada % 10 == 0) {
                 System.out.print(",  ini= " + pob.size());
@@ -467,7 +467,7 @@ public class Genetic {
         } while (!finProceso);
 
         for (int i = 0; i < 100; i++) {
-            indAux = (Individuo) pob.elementAt(i);
+            indAux = (Individuo) pob.get(i);
             System.out.print(i + ",   ");
             for (int j = 0; j < indAux.getGenes().length; j++) {
                 System.out.print(indAux.getGenes()[j] + ", ");
@@ -525,8 +525,8 @@ indAux.evalua(cat1);
             pobNueva = new Poblacion();
             // incluye elite a la proxima generaci�n
             for (int i = 0; i < ELITE; i++) {
-                if (!pobNueva.contiene((Individuo) pob.elementAt(i))) {
-                    pobNueva.add((Individuo) pob.elementAt(i));
+                if (!pobNueva.contiene((Individuo) pob.get(i))) {
+                    pobNueva.add((Individuo) pob.get(i));
                 }
             }
 
@@ -570,8 +570,8 @@ indiviNuevo=cat1.getIndividuo2();
                 do {
                     indxElem2 = genRandPP.nextInt(pob.size());
                 } while (indxElem1 == indxElem2);
-                elem1 = ((Individuo) pob.elementAt(indxElem1));
-                elem2 = ((Individuo) pob.elementAt(indxElem2));
+                elem1 = ((Individuo) pob.get(indxElem1));
+                elem2 = ((Individuo) pob.get(indxElem2));
 
                 pobAux.add(elem1); //se agregan como candidatos a la pr�xima generacion
                 pobAux.add(elem2);
@@ -584,7 +584,7 @@ indiviNuevo=cat1.getIndividuo2();
                 if (genRandPP.nextInt(10000) <= FACTMUT * 10000) {
                     indiviNuevo = (Individuo) elem1.clone();
                     gpoIndx = genRandPP.nextInt(indiviNuevo.getGenes().length);
-                    gpoAux = (Grupo) cat1.grupos.elementAt(gpoIndx);
+                    gpoAux = (Grupo) cat1.grupos.get(gpoIndx);
                     selec = gpoAux.getOpcs()[genRandPP.nextInt(gpoAux.getOpcs().length)];
                     indiviNuevo.setGene(gpoIndx, selec);
 
@@ -598,7 +598,7 @@ indiviNuevo=cat1.getIndividuo2();
                 if (genRandPP.nextInt(10000) <= FACTMUT * 10000) {
                     indiviNuevo = (Individuo) elem2.clone();
                     gpoIndx = genRandPP.nextInt(indiviNuevo.getGenes().length);
-                    gpoAux = (Grupo) cat1.grupos.elementAt(gpoIndx);
+                    gpoAux = (Grupo) cat1.grupos.get(gpoIndx);
                     selec = gpoAux.getOpcs()[genRandPP.nextInt(gpoAux.getOpcs().length)];
                     indiviNuevo.setGene(gpoIndx, selec);
 
@@ -645,14 +645,14 @@ nuevo2.evalua(cat1);
                 pobAux.add(nuevo2);
 
                 pobAux.ordenaMenMayor();
-                if (!pobNueva.contiene((Individuo) pobAux.elementAt(0))) {
-                    pobNueva.add((Individuo) pobAux.elementAt(0));
+                if (!pobNueva.contiene((Individuo) pobAux.get(0))) {
+                    pobNueva.add((Individuo) pobAux.get(0));
                 }
-                if (!pobNueva.contiene((Individuo) pobAux.elementAt(1))) {
-                    pobNueva.add((Individuo) pobAux.elementAt(1));
+                if (!pobNueva.contiene((Individuo) pobAux.get(1))) {
+                    pobNueva.add((Individuo) pobAux.get(1));
                 }
-                if (!pobNueva.contiene((Individuo) pobAux.elementAt(2))) {
-                    pobNueva.add((Individuo) pobAux.elementAt(2));
+                if (!pobNueva.contiene((Individuo) pobAux.get(2))) {
+                    pobNueva.add((Individuo) pobAux.get(2));
                 }
 
             } while (pobNueva.size() < POBLMAX);
@@ -665,7 +665,7 @@ nuevo2.evalua(cat1);
             int indxMinimo = 0;
             int costo = 0;
             for (int i = 0; i < pob.size(); i++) {
-                costo = ((Individuo) pob.elementAt(i)).getCosto().getCostoTotal();
+                costo = ((Individuo) pob.get(i)).getCosto().getCostoTotal();
 
                 if (costo < minimo) {
                     minimo = costo;
@@ -678,7 +678,7 @@ nuevo2.evalua(cat1);
             float prom = ((float) promedio) / pob.size();
             System.out.print(camada++ + ",   " + minimo + ", " + prom + ", " + maximo + ",   ");
 
-            ((Individuo) pob.elementAt(indxMinimo)).getCosto().imprimeCosto();
+            ((Individuo) pob.get(indxMinimo)).getCosto().imprimeCosto();
 
             if (camada % 10 == 0) {
                 System.out.print(",  ini= " + pob.size());
@@ -693,7 +693,7 @@ nuevo2.evalua(cat1);
         } while (!finProceso);
 
         for (int i = 0; i < 100; i++) {
-            indAux = (Individuo) pob.elementAt(i);
+            indAux = (Individuo) pob.get(i);
             System.out.print(i + ",   ");
             for (int j = 0; j < indAux.getGenes().length; j++) {
                 System.out.print(indAux.getGenes()[j] + ", ");
@@ -736,14 +736,14 @@ nuevo2.evalua(cat1);
             Poblacion vecindario = cat1.mejorVecinoTotal(nVecindad);
 
             for (int i = 0; i < nVecindad; i++) {
-                indActual = (Individuo) vecindario.elementAt(i);
+                indActual = (Individuo) vecindario.get(i);
                 if (listaTabu.contiene(indActual)) {
                     //individuo contenido en tabu
 
                 } else {
                     listaTabu.add(indActual);
                     if (listaTabu.size() == nLista + 1) {
-                        listaTabu.removeElementAt(0);
+                        listaTabu.remove(0);
                     }
                     break;
                 }
@@ -762,19 +762,19 @@ nuevo2.evalua(cat1);
 
         VectorAulas va = cat1.aulas;
         for (int i = 0; i < va.size(); i++) {
-            int empalm = ((Aula) cat1.aulas.elementAt(i)).cuentaEmpalmes();
+            int empalm = ((Aula) cat1.aulas.get(i)).cuentaEmpalmes();
             if (empalm != 0) {
                 System.out.print("Empalme de aula ");
-                System.out.print(((Aula) va.elementAt(i)).getClave() + "  ");
+                System.out.print(((Aula) va.get(i)).getClave() + "  ");
                 System.out.println(empalm);
             }
         }
         VectorMaestros vm = cat1.maestros;
         for (int i = 0; i < vm.size(); i++) {
-            int empalm = ((Maestro) vm.elementAt(i)).cuentaEmpalmes();
+            int empalm = ((Maestro) vm.get(i)).cuentaEmpalmes();
             if (empalm != 0) {
                 System.out.print("Empalme de maestro ");
-                System.out.print(((Maestro) vm.elementAt(i)).getNombre());
+                System.out.print(((Maestro) vm.get(i)).getNombre());
                 System.out.println(empalm);
             }
         }

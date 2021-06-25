@@ -1,6 +1,6 @@
 package tesis1.datos;
 
-import java.util.Vector;
+import java.util.ArrayList;
 import tesis1.io.*;
 
 /**
@@ -12,18 +12,18 @@ import tesis1.io.*;
  * @version 1.0
  */
 
-public class VectorSemCarrs extends Vector implements Cloneable{
+public class VectorSemCarrs extends ArrayList<SemCarrera> implements Cloneable{
 
   private VectorGrupos grupos; //apuntador a vector de grupos
 
   public VectorSemCarrs(String archGrupos, VectorGrupos grps) {
-    super(1,1);
+    //super(1,1);
     leeArchSemCarrs(archGrupos, grps);
     cuentaGrupos(grps);
     grupos=grps;
   }
    public VectorSemCarrs() {
-    super(1,1);
+    //super(1,1);
   }
 
 
@@ -55,7 +55,7 @@ public class VectorSemCarrs extends Vector implements Cloneable{
 
         // Agregamos rama al semestreCarrera
         for(int j=0; j<grupos.size(); j++){
-          if(((Grupo)grupos.elementAt(j)).getClave().equals(params[1])){
+          if(((Grupo)grupos.get(j)).getClave().equals(params[1])){
           // Se agrega un grupo al semestre carrera
             ElementoDeSemCarr elementoDeSemCarr =  new ElementoDeSemCarr(j,  Integer.parseInt(params[2]),Integer.parseInt(params[3]));
               System.out.println(elementoDeSemCarr.toString());
@@ -74,7 +74,7 @@ public class VectorSemCarrs extends Vector implements Cloneable{
     SemCarrera salida = null;
     SemCarrera aux;
     for(int i=0; i<n; i++){
-      aux = ((SemCarrera)this.elementAt(i));
+      aux = ((SemCarrera)this.get(i));
       if(aux.getNombre().equals(nombre)){salida=aux;}
     }
     return salida;
@@ -87,17 +87,17 @@ public class VectorSemCarrs extends Vector implements Cloneable{
     for(int s=0; s<this.size(); s++){
     // sc = semestre carrera,  r=elemento de semestre carrera que se compara con
     // todos los de mas (b)
-      sc = ((SemCarrera)this.elementAt(s));
+      sc = ((SemCarrera)this.get(s));
       for(int r=0; r<sc.size()-1; r++){
         int grupoR, grupoB;
         for( int b=r+1; b < sc.size();  b++){
           //Si los dos grupos tienen la misma clave incrementa cont
-          grupoR = ((ElementoDeSemCarr)sc.elementAt(r)).grupo;
-          grupoB = ((ElementoDeSemCarr)sc.elementAt(b)).grupo;
-          if( ((Grupo)grupos.elementAt(grupoR)).getClave().equals(
-                  ((Grupo)grupos.elementAt(grupoB)).getClave()   )  ){
-            (((ElementoDeSemCarr)sc.elementAt(r)).n)++;
-            (((ElementoDeSemCarr)sc.elementAt(b)).n)++;
+          grupoR = ((ElementoDeSemCarr)sc.get(r)).grupo;
+          grupoB = ((ElementoDeSemCarr)sc.get(b)).grupo;
+          if( ((Grupo)grupos.get(grupoR)).getClave().equals(
+                  ((Grupo)grupos.get(grupoB)).getClave()   )  ){
+            (((ElementoDeSemCarr)sc.get(r)).n)++;
+            (((ElementoDeSemCarr)sc.get(b)).n)++;
           }
         }// end for b
       }// end for r
@@ -110,27 +110,27 @@ public class VectorSemCarrs extends Vector implements Cloneable{
     SemCarrera sc;
     for(int s=0; s<this.size(); s++){
     // sc = semestre carrera,  r=elemento de semestre carrera
-      sc = ((SemCarrera)this.elementAt(s));
+      sc = ((SemCarrera)this.get(s));
 
       sc.calculaTraysValidas();
 
       System.out.println("\nSemestre Carrera ="+sc.getNombre());
       for(int r=0; r<sc.size(); r++){
         int gp;
-        System.out.print(gp=((ElementoDeSemCarr)sc.elementAt(r)).grupo);
+        System.out.print(gp=((ElementoDeSemCarr)sc.get(r)).grupo);
         System.out.print(", \t");
-        System.out.print(((Grupo)grupos.elementAt(gp)).getHora());
+        System.out.print(((Grupo)grupos.get(gp)).getHora());
         System.out.print(", \t");
-        System.out.print( ((SlotTime)vslt.get(((Grupo)grupos.elementAt(gp)).getHora())).getOffsetStringHora()+
-                          ((SlotTime)vslt.get(((Grupo)grupos.elementAt(gp)).getHora())).getDescripcion()  );
+        System.out.print( ((SlotTime)vslt.get(((Grupo)grupos.get(gp)).getHora())).getOffsetStringHora()+
+                          ((SlotTime)vslt.get(((Grupo)grupos.get(gp)).getHora())).getDescripcion()  );
         System.out.print(", \t");
-        System.out.print(((Grupo)grupos.elementAt(gp)).getClave());
+        System.out.print(((Grupo)grupos.get(gp)).getClave());
         System.out.print(", \t");
-        System.out.print(((ElementoDeSemCarr)sc.elementAt(r)).in);
+        System.out.print(((ElementoDeSemCarr)sc.get(r)).in);
         System.out.print(", ");
-        System.out.print(((ElementoDeSemCarr)sc.elementAt(r)).out);
+        System.out.print(((ElementoDeSemCarr)sc.get(r)).out);
         System.out.print(", ");
-        System.out.print(((ElementoDeSemCarr)sc.elementAt(r)).n);
+        System.out.print(((ElementoDeSemCarr)sc.get(r)).n);
         System.out.print(",    ");
         System.out.print(sc.trayectoriasValidas[r]);
         System.out.print(",    ");
@@ -149,7 +149,7 @@ public class VectorSemCarrs extends Vector implements Cloneable{
 
   public void setSlotsTime(VectorSlotTime horas){
     for(int i=0; i<this.size(); i++){
-      ((SemCarrera)this.elementAt(i)).setSlotsTime(horas);
+      ((SemCarrera)this.get(i)).setSlotsTime(horas);
     }
   }
 
@@ -157,7 +157,7 @@ public class VectorSemCarrs extends Vector implements Cloneable{
   public int getBloqueads(){
     int suma=0;
     for(int i=0;i<this.size();i++){
-      suma += ((SemCarrera)this.elementAt(i)).getBloquea();
+      suma += ((SemCarrera)this.get(i)).getBloquea();
     }
     return suma;
   }
@@ -178,7 +178,7 @@ public class VectorSemCarrs extends Vector implements Cloneable{
     int matus=0, vesps=0, t=0, s=0,suma=0, n;
     SemCarrera scAux;
     for(int i=0;i<this.size();i++){
-      scAux=(SemCarrera)this.elementAt(i);
+      scAux=(SemCarrera)this.get(i);
       n = scAux.size();
       for(int j=0; j<n; j++){
         if(scAux.tMatu[j] + scAux.tVesp[j] == 0) suma++;

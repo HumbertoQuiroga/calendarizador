@@ -106,8 +106,8 @@ public class Catalogo implements Cloneable{
     int n=grupos.size();
     Grupo element;
     for(int i=0; i<n; i++){
-      element= (Grupo)grupos.elementAt(i);
-      Materia m = (Materia)materias.elementAt(materias.getIndexClave(element.getClave()));
+      element= (Grupo)grupos.get(i);
+      Materia m = (Materia)materias.get(materias.getIndexClave(element.getClave()));
 
       System.out.print( element.getClave() + ",  G" );
       System.out.print( element.getNum());
@@ -118,17 +118,17 @@ public class Catalogo implements Cloneable{
       SlotTime s2 = (SlotTime)horas.get(element.getHora());
       System.out.print( s2.getOffsetStringHora()+s2.getDescripcion()+",  ");
 
-      System.out.print( ((Maestro)maestros.elementAt(y)).getNombre()+",\t\t");
+      System.out.print( ((Maestro)maestros.get(y)).getNombre()+",\t\t");
 
       y=element.getAula();
-      System.out.println( ((Aula)aulas.elementAt(y)).getClave() );
+      System.out.println( ((Aula)aulas.get(y)).getClave() );
 
     }
   }
 
   public void asignaHorRandom(){
     for(int i=0; i<grupos.size(); i++){
-      Grupo g = (Grupo)grupos.elementAt(i);
+      Grupo g = (Grupo)grupos.get(i);
       int h = g.getOpcs()[genRand.nextInt(g.getOpcs().length)];
       asignaHora(i,h);
     }
@@ -146,11 +146,11 @@ public class Catalogo implements Cloneable{
      * @param sT
    */
   public void asignaHora(int grup, int sT){
-    int aul = ((Grupo)grupos.elementAt(grup)).getAula();
-    int maes = ((Grupo)grupos.elementAt(grup)).getMaestro();
-    ((Aula)aulas.elementAt(aul)).asigna((SlotTime)horas.get(sT));
-    ((Maestro)maestros.elementAt(maes)).asigna((SlotTime)horas.get(sT));
-    ((Grupo)grupos.elementAt(grup)).setHora(sT);
+    int aul = ((Grupo)grupos.get(grup)).getAula();
+    int maes = ((Grupo)grupos.get(grup)).getMaestro();
+    ((Aula)aulas.get(aul)).asigna((SlotTime)horas.get(sT));
+    ((Maestro)maestros.get(maes)).asigna((SlotTime)horas.get(sT));
+    ((Grupo)grupos.get(grup)).setHora(sT);
   }
 
 
@@ -160,11 +160,11 @@ public class Catalogo implements Cloneable{
      * @param grup
    */
   public void desasignaHora(int grup){
-    int sT = ((Grupo)grupos.elementAt(grup)).getHora();
-    int aul = ((Grupo)grupos.elementAt(grup)).getAula();
-    int maes = ((Grupo)grupos.elementAt(grup)).getMaestro();
-    ((Aula)aulas.elementAt(aul)).desAsigna((SlotTime)horas.get(sT));
-    ((Maestro)maestros.elementAt(maes)).desAsigna((SlotTime)horas.get(sT));
+    int sT = ((Grupo)grupos.get(grup)).getHora();
+    int aul = ((Grupo)grupos.get(grup)).getAula();
+    int maes = ((Grupo)grupos.get(grup)).getMaestro();
+    ((Aula)aulas.get(aul)).desAsigna((SlotTime)horas.get(sT));
+    ((Maestro)maestros.get(maes)).desAsigna((SlotTime)horas.get(sT));
     //((Grupo)grupos.elementAt(grup)).setHora(null);
   }
 
@@ -173,12 +173,12 @@ public class Catalogo implements Cloneable{
     Grupo gpoAux;
     int cont=0;
     for(int i=0; i<grupos.size();i++){
-      gpoAux=(Grupo)grupos.elementAt(i);
+      gpoAux=(Grupo)grupos.get(i);
 
       if(gpoAux.getOpcs().length==0){
         System.out.println("No hay opciones para el grupo:");
         System.out.println(gpoAux.getClave()+"  "+
-          ((Maestro)maestros.elementAt(gpoAux.getMaestro())).getNombre());
+          ((Maestro)maestros.get(gpoAux.getMaestro())).getNombre());
         cont++;
       }
     }
@@ -203,7 +203,7 @@ public class Catalogo implements Cloneable{
     Individuo indAux = new Individuo(nGps);
     int llave=0;
     for(int i=0; i<nGps; i++){
-      hora=((Grupo)gps.elementAt(i)).getHora();
+      hora=((Grupo)gps.get(i)).getHora();
       llave=llave+hora;
       indAux.setGene(i,hora);
     }
@@ -230,7 +230,7 @@ public class Catalogo implements Cloneable{
     int stOrig, stProp;
 
     for(int g=0; g<this.grupos.size(); g++){
-      gSel=(Grupo)this.grupos.elementAt(g);
+      gSel=(Grupo)this.grupos.get(g);
       stOrig = gSel.getHora(); //horario original del grupo seleccionado
       //Propone un horario nuevo al grupo seleccionado
       for(int h=0; h<gSel.getOpcs().length; h++){
@@ -249,14 +249,14 @@ indActual=this.getIndividuo2();
             vecinos.add(indActual);
             break;
           }
-          Individuo aux=(Individuo)vecinos.elementAt(j);
+          Individuo aux=(Individuo)vecinos.get(j);
           if(indActual.getCosto().getCostoTotal() < aux.getCosto().getCostoTotal()){
             vecinos.add(j,indActual);
             break;
           }
         }//for j
         if(vecinos.size()==nVecinos+1){
-          vecinos.removeElementAt(nVecinos);
+          vecinos.remove(nVecinos);
         }
       }//for h
     }//for g
@@ -273,7 +273,7 @@ indActual=this.getIndividuo2();
     int nGps=this.grupos.size();
     for(int i=0; i<nVecinos; i++){
       gpoProp=genRand.nextInt(nGps);
-      gSel=(Grupo)this.grupos.elementAt(gpoProp);
+      gSel=(Grupo)this.grupos.get(gpoProp);
 
       stOrig = gSel.getHora(); //horario original del grupo seleccionado
       //Propone un horario nuevo al grupo seleccionado
@@ -290,14 +290,14 @@ indActual=this.getIndividuo2();
           vecinos.add(indActual);
           break;
         }
-        Individuo aux=(Individuo)vecinos.elementAt(j);
+        Individuo aux=(Individuo)vecinos.get(j);
         if(indActual.getCostoTotal() < aux.getCostoTotal()){
           vecinos.add(j,indActual);
           break;
         }
       }//for j
       if(vecinos.size()==nVecinos+1){
-        vecinos.removeElementAt(nVecinos);
+        vecinos.remove(nVecinos);
       }
     }//for i
     return vecinos;

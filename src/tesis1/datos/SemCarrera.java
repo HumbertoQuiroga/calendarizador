@@ -1,5 +1,6 @@
 package tesis1.datos;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Vector;
  * @author Adolfo Espinoza
  * @version 1.0
  */
-public class SemCarrera extends Vector {
+public class SemCarrera extends ArrayList{
   private String nombre;
   private VectorGrupos grupos; //apuntador a vector de grupos
   private VectorSlotTime horas;
@@ -22,7 +23,7 @@ public class SemCarrera extends Vector {
   public int traysVesper =0;//turnos
 
   public SemCarrera(String nom, VectorGrupos grps) {
-     super(0,1);
+     //super(0,1);
      nombre = nom;
      grupos = grps;
   }
@@ -49,14 +50,14 @@ public class SemCarrera extends Vector {
     int [] traysValidas = new  int[this.size()];
     for(int i=0; i<this.size(); i++){
 
-        if(((ElementoDeSemCarr)this.elementAt(i)).in!=nodoIN)
+        if(((ElementoDeSemCarr)this.get(i)).in!=nodoIN)
           continue;
 
-        int grupo=((ElementoDeSemCarr)this.elementAt(i)).grupo;
-        int hora = ((Grupo)grupos.elementAt(grupo)).getHora();
+        int grupo=((ElementoDeSemCarr)this.get(i)).grupo;
+        int hora = ((Grupo)grupos.get(grupo)).getHora();
         if(horas.isEmpalme(hora,horsOcup)) continue;
 
-        if(((ElementoDeSemCarr)this.elementAt(i)).out==-1){
+        if(((ElementoDeSemCarr)this.get(i)).out==-1){
           traysValidas[i]++;
           totTrays++;
           //Verifica si el horario es matutino o vespertino
@@ -84,13 +85,13 @@ public class SemCarrera extends Vector {
 
         // Calcula trayectorias validas del nodo hijo
         int [] ramaHijo = calculaTraysValidas(
-                              ((ElementoDeSemCarr)this.elementAt(i)).out,
+                              ((ElementoDeSemCarr)this.get(i)).out,
                               horsOcupAgreg );
         //Sumamos trayectorias de nodos hijo
         for(int j=0;j<ramaHijo.length;j++){
           traysValidas[j]=traysValidas[j]+ramaHijo[j];
-          if(((ElementoDeSemCarr)this.elementAt(j)).in==
-              ((ElementoDeSemCarr)this.elementAt(i)).out){
+          if(((ElementoDeSemCarr)this.get(j)).in==
+              ((ElementoDeSemCarr)this.get(i)).out){
             traysValidas[i]+=ramaHijo[j];
           }
         }
@@ -105,7 +106,7 @@ public class SemCarrera extends Vector {
       if(trayectoriasValidas[t]==0) bloqueados +=1;
       else{
         desbalances += Math.abs(trayectoriasValidas[t] -
-                        totTrays/((ElementoDeSemCarr)this.elementAt(t)).n);
+                        totTrays/((ElementoDeSemCarr)this.get(t)).n);
       }
     }//for t
     return bloqueados /*+ desbalances*/;

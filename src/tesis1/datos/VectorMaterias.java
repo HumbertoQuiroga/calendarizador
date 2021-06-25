@@ -1,5 +1,6 @@
 package tesis1.datos;
 
+import java.util.ArrayList;
 import java.util.Vector;
 import tesis1.io.*;
 /**
@@ -11,10 +12,10 @@ import tesis1.io.*;
  * @version 1.0
  */
 
-public class VectorMaterias extends Vector implements Cloneable{
+public class VectorMaterias extends ArrayList<Materia> implements Cloneable{
 
   public VectorMaterias(String archMats) {
-    super(1,1);
+    //super(1,1);
     leeArchMaterias(archMats);
   }
 
@@ -36,7 +37,8 @@ public class VectorMaterias extends Vector implements Cloneable{
         buff.setTipoHors( Long.parseLong(params[2],16) );
         buff.setDescrip( params[3] );
         System.out.println(buff.toString());
-        this.addElement(buff); // agrega nueva materia al vector
+        //**cambiado por add
+        this.add(buff); // agrega nueva materia al vector
       }
     }
   }
@@ -46,7 +48,7 @@ public class VectorMaterias extends Vector implements Cloneable{
     int n =this.size();
     int cont;
     for(cont=0; cont<n; cont++){
-      claveEnVect=((Materia)this.elementAt(cont)).getClave();
+      claveEnVect=((Materia)this.get(cont)).getClave();
       if(claveEnVect.equals(claveBuscada))break;
     }
     if(cont==n){

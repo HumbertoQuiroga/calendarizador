@@ -1,4 +1,5 @@
 package tesis1.datos;
+import java.util.ArrayList;
 import java.util.Vector;
 import tesis1.io.*;
 import tesis1.genetic.*;
@@ -12,21 +13,21 @@ import tesis1.genetic.*;
  * @version 1.0
  */
 
-public class VectorGrupos extends Vector implements Cloneable{
+public class VectorGrupos extends ArrayList<Grupo> implements Cloneable{
 
   public VectorGrupos(String archGrupos, VectorMaestros maestros) {
-    super(1,1);
+    //super(1,1);
     leeArchGrupos(archGrupos, maestros);
   }
    public VectorGrupos() {
-    super(1,1);
+    //super(1,1);
   }
 
   public Object clone(){
     VectorGrupos aux = new VectorGrupos();
     int nGrps=this.size();
     for(int i=0; i<nGrps; i++){
-      aux.addElement( ((Grupo)this.elementAt(i)).clone() );
+      aux.add((Grupo)this.get(i).clone());
     }
     return aux;
   }
@@ -50,7 +51,7 @@ public class VectorGrupos extends Vector implements Cloneable{
         //objeto "grupo".
         buff.setMaestro( maestros.getIndexClave(params[2]) );
           System.out.println(buff.toString());
-        this.addElement(buff); // agrega nuevo grupo al vector
+        this.add(buff); // agrega nuevo grupo al vector
       }
     }
   }
@@ -63,11 +64,11 @@ public class VectorGrupos extends Vector implements Cloneable{
 
     int nGrups = this.size();
     for(int i=0; i<nGrups; i++){
-      String mat = ((Grupo)this.elementAt(i)).getClave();
+      String mat = ((Grupo)this.get(i)).getClave();
       int indxMat = materias.getIndexClave(mat);
-      String aul=((Materia)materias.elementAt(indxMat)).getTipoAula();
+      String aul=((Materia)materias.get(indxMat)).getTipoAula();
       int indxAula = aulas.getIndexClave(aul);
-      ((Grupo)this.elementAt(i)).setAula(indxAula);
+      ((Grupo)this.get(i)).setAula(indxAula);
     }
   }
 
@@ -82,12 +83,12 @@ public class VectorGrupos extends Vector implements Cloneable{
     int numGrups = this.size();
 
     for(int g=0; g<numGrups; g++){
-      Grupo grup = (Grupo)this.elementAt(g);
-      Maestro maest = (Maestro)maestros.elementAt(grup.getMaestro());
+      Grupo grup = (Grupo)this.get(g);
+      Maestro maest = (Maestro)maestros.get(grup.getMaestro());
 
-      String claveMat=((Grupo)this.elementAt(g)).getClave();
+      String claveMat=((Grupo)this.get(g)).getClave();
       int indxMat = materias.getIndexClave(claveMat);
-      Materia mate = (Materia) materias.elementAt(indxMat);
+      Materia mate = (Materia) materias.get(indxMat);
 
       grup.setOpcs( horas.getHorsFacts(mate, maest) );
     }
@@ -96,7 +97,7 @@ public class VectorGrupos extends Vector implements Cloneable{
   public Individuo getIndividuo(){
     Individuo aux = new Individuo(this.size());
     for(int i=0; i<this.size(); i++){
-      aux.setGene(i,((Grupo)this.elementAt(i)).getHora());
+      aux.setGene(i,((Grupo)this.get(i)).getHora());
     }
     return aux;
   }

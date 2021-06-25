@@ -2,6 +2,7 @@ package tesis1.datos;
 
 import java.util.Vector;
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Title:        Asignaci�n de horarios
@@ -12,15 +13,15 @@ import java.io.*;
  * @version 1.0
  */
 
-public class VectorAulas extends Vector implements Cloneable{
+public class VectorAulas extends ArrayList<Aula> implements Cloneable{
 
   public VectorAulas(String archAulas) {
-    super(1,1);
+    //super(1,1);
     leeArchAulas(archAulas);
   }
 
   public VectorAulas(){
-    super(1,1);
+    //super(1,1);
   }
 
 
@@ -28,7 +29,7 @@ public class VectorAulas extends Vector implements Cloneable{
     VectorAulas aux = new VectorAulas();
     int nAuls=this.size();
     for(int i=0; i<nAuls; i++){
-      aux.addElement( ((Aula)this.elementAt(i)).clone() );
+      aux.add((Aula) this.get(i).clone());
     }
     return aux;
   }
@@ -41,7 +42,7 @@ public class VectorAulas extends Vector implements Cloneable{
     DataInput arch;
     AulaArch aulaEnt;
     Aula aula;
-    this.removeAllElements();
+    this.clear();
     this.trimToSize();
 
     try{
@@ -54,7 +55,7 @@ public class VectorAulas extends Vector implements Cloneable{
         aula = new Aula();
         aula.copiaDesde(aulaEnt);  // copia datos de AulaEnt a Aula
         System.out.println(aula.toString());
-        this.addElement(aula);      // Lo agrega al vector
+        this.add(aula);      // Lo agrega al vector
       }
     }
     catch(IOException e) {
@@ -69,7 +70,7 @@ public class VectorAulas extends Vector implements Cloneable{
     int n =this.size();
     int cont;
     for(cont=0; cont<n; cont++){
-      claveEnVect=((Aula)this.elementAt(cont)).getClave();
+      claveEnVect=((Aula)this.get(cont)).getClave();
       if(claveEnVect.equals(claveBuscada))break;
     }
     if(cont==n){
@@ -81,14 +82,14 @@ public class VectorAulas extends Vector implements Cloneable{
   public int getEmpalmes(){
     int suma=0;
     for(int i=0; i<this.size(); i++){
-      suma += (int)((Aula)this.elementAt(i)).cuentaEmpalmes();
+      suma += (int)((Aula)this.get(i)).cuentaEmpalmes();
     }
     return suma;
   }
 
   public void desasignaTodos(){
     for(int i=0; i<this.size(); i++){
-      ((Aula)this.elementAt(i)).desasignaTodo();
+      ((Aula)this.get(i)).desasignaTodo();
     }
   }
 }

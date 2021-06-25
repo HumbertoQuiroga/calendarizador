@@ -2,6 +2,7 @@ package tesis1.datos;
 
 import java.util.Vector;
 import java.io.*;
+import java.util.ArrayList;
 import tesis1.io.ParamFileRead;
 
 /**
@@ -13,24 +14,24 @@ import tesis1.io.ParamFileRead;
  * @version 1.0
  */
 
-public class VectorMaestros extends Vector implements Cloneable{
+public class VectorMaestros extends ArrayList<Maestro> implements Cloneable{
 
   public VectorMaestros(String archMaestros) {
     
-    super(1,1);
+    //super(1,1);
      
     leeArchMaestros(archMaestros);
   }
 
   public VectorMaestros() {
-    super(1,1);
+    //super(1,1);
   }
 
   public Object clone(){
     VectorMaestros aux = new VectorMaestros();
     int nMaes=this.size();
     for(int i=0; i<nMaes; i++){
-      aux.addElement( ((Maestro)this.elementAt(i)).clone() );
+      aux.add((Maestro)this.get(i).clone());
     }
     return aux;
   }
@@ -45,7 +46,7 @@ public class VectorMaestros extends Vector implements Cloneable{
     DataInput arch;
     MaestroArch maestroEnt;
     Maestro maestro;
-    this.removeAllElements();
+    this.clear();
     this.trimToSize();
 
     try{
@@ -58,7 +59,7 @@ public class VectorMaestros extends Vector implements Cloneable{
         maestro = new Maestro();
         maestro.copiaDesde(maestroEnt);  // copia datos de MaestroEnt a Maestro
         System.out.println(maestro.toString());
-        this.addElement(maestro);      // Lo agrega al vector
+        this.add(maestro);      // Lo agrega al vector
       }
 
     }
@@ -72,7 +73,7 @@ public class VectorMaestros extends Vector implements Cloneable{
     int n =this.size();
     int cont;
     for(cont=0; cont<n; cont++){
-      claveEnVect=((Maestro)this.elementAt(cont)).getClave();
+      claveEnVect=((Maestro)this.get(cont)).getClave();
       claveEnVect=claveEnVect.substring(1,claveEnVect.length());
 
       if(claveEnVect.equals(claveBuscada))break;
@@ -88,7 +89,7 @@ public class VectorMaestros extends Vector implements Cloneable{
   public int getEmpalmes(){
     int suma=0;
     for(int i=0; i<this.size(); i++){
-      suma += (int)((Maestro)this.elementAt(i)).cuentaEmpalmes();
+      suma += (int)((Maestro)this.get(i)).cuentaEmpalmes();
     }
     return suma;
   }
@@ -97,7 +98,7 @@ public class VectorMaestros extends Vector implements Cloneable{
   public int getHrsContinuas(){
     int suma=0;
     for(int i=0; i<this.size(); i++){
-      suma += (int)((Maestro)this.elementAt(i)).horsContinuas(6);
+      suma += (int)((Maestro)this.get(i)).horsContinuas(6);
     }
     return suma;
   }
@@ -105,7 +106,7 @@ public class VectorMaestros extends Vector implements Cloneable{
   public void desasignaTodos(){
     int n=this.size();
     for(int i=0; i<n; i++){
-      ((Maestro)this.elementAt(i)).desasignaTodo();
+      ((Maestro)this.get(i)).desasignaTodo();
     }
   }
 

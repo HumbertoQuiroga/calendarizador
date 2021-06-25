@@ -3,17 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/VectorMaestros.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/genetic/Costo.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/VectorMaterias.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/genetic/Poblacion.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/VectorSlotTime.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/genetic/Individuo.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/VectorGrupos.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/VectorAulas.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/Catalogo.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/datos/VectorSemCarrs.java</file>
-            <file>file:/C:/Users/hq82/Documents/NetBeansProjects/Calendarizador/src/tesis1/io/ParamFileRead.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/Maestro.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/Grupo.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/genetic/Poblacion.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/SlotTime.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/VectorSemCarrs.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/SemCarrera.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/ElementoDeSemCarr.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/Genetic.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/Materia.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/Catalogo.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/genetic/Costo.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/VectorMaestros.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/genetic/Individuo.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/MaestroArch.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/VectorMaterias.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/io/ParamFileRead.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/VectorAulas.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/VectorSlotTime.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/HorarioSemana.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/VectorGrupos.java</file>
+            <file>file:/C:/Users/hq82/Desktop/Calendarizador/src/tesis1/datos/Recurso.java</file>
         </group>
     </open-files>
 </project-private>
